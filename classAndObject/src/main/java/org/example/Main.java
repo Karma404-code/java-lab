@@ -4,13 +4,24 @@ package org.example;
 // click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
 public class Main {
     static void main() {
-        Student s = new Student("Sushan");
-        s.setAge(14);
 
-        Student.Faculty f = s.getFaculty();
+        int a = 9;
+        int b = 9;
 
-        System.out.println(s.toString());
-        System.out.println(f.toString());
+        boolean compInt = (a == b );
+        System.out.println(compInt);
+
+        var str1 = new String("shrawan");
+        var str2 = new String("shrawan");
+
+        boolean compStrObj = str1 == str2;
+        System.out.println(compStrObj);
+
+        var str3 = "hello";
+        var str4 = "hello";
+
+        boolean compStrPool = str3 == str4;
+        System.out.println(compStrPool);
 
     }
 }
