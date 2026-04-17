@@ -24,7 +24,7 @@ public class Main {
             JPanel loginPanel = new LoginUI(frame);
             // JPanel dashboardPanel = new DashboardUI(frame);
             // JPanel studentPanel = new StudentTable(frame);
-            frame.add(new StudentTable(frame), BorderLayout.CENTER);
+            frame.add(new LoginUI(frame), BorderLayout.CENTER);
             // frame.add(new DashboardUI(frame), BorderLayout.CENTER);
             frame.setVisible(true);
         } catch( Exception ex ) {
