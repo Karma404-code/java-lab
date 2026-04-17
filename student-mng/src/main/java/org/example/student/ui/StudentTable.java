@@ -19,7 +19,8 @@ public class StudentTable extends JPanel {
     DefaultTableModel model;
     JTable table;
     StudentService studentService;
-
+    DefaultComboBoxModel<String> sortModel;
+    JComboBox<String> sortComboBox;
     public StudentTable(JFrame parentFrame) {
         this.parentFrame = parentFrame;
         studentService = StudentService.getInstance();
@@ -36,6 +37,7 @@ public class StudentTable extends JPanel {
 
     public void initStudentOptionPanel() {
         studentOptionPanel = new JPanel();
+        studentOptionPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
 
         searchStudent = new JTextField();
         searchButton = new JButton("Search");
@@ -49,11 +51,10 @@ public class StudentTable extends JPanel {
         editStudentButton.addActionListener(e -> {
             int selectedRow = table.getSelectedRow();
             if (selectedRow >= 0) {
-                // todo : get the selected student in edit panel
                 int studentId = Integer.parseInt(model.getValueAt(selectedRow, 0).toString());
                 Student student = studentService.getStudentById(studentId);
-                parentFrame.add(new EditStudent(parentFrame, this, student), BorderLayout.EAST);
-                parentFrame.revalidate();
+                new EditStudent(parentFrame, this, student);
+                // parentFrame.revalidate();
             } else {
                 JOptionPane.showMessageDialog(this,
                         "Please select a student to edit",
@@ -84,46 +85,62 @@ public class StudentTable extends JPanel {
             }
         });
 
-        dashboardButton = new JButton("Dashboard");
-        dashboardButton.addActionListener(e -> {
-           parentFrame.getContentPane().removeAll();
-           parentFrame.add(new DashboardUI(parentFrame), BorderLayout.CENTER);
-           parentFrame.revalidate();
-           parentFrame.repaint();
+        sortModel = new DefaultComboBoxModel<>();
+        sortModel.addElement("Id");
+        sortModel.addElement("Name");
+        sortModel.addElement("Batch");
+
+        sortComboBox = new JComboBox<>(sortModel);
+        sortComboBox.addActionListener(e -> {
+           String option = sortComboBox.getSelectedItem().toString();
+           sortTable(option.toUpperCase());
         });
 
-      /*  studentOptionPanel.add(searchStudent);
-        studentOptionPanel.add(searchButton);*/
+
         studentOptionPanel.add(addStudentButton);
         studentOptionPanel.add(editStudentButton);
         studentOptionPanel.add(deleteStudentButton);
-        studentOptionPanel.add(dashboardButton);
+        studentOptionPanel.add(new JLabel("Sort"));
+        studentOptionPanel.add(sortComboBox);
     }
 
     public void initStudentTable() {
 
-            Object[] cols = {"Id", "Name", "Email", "Batch", "Gender"};
+        parentFrame.setJMenuBar(new MenuBar(parentFrame));
+        Object[] cols = {"Id", "Name", "Email", "Batch", "Gender"};
 
-            model = new DefaultTableModel(cols, 0);
+        model = new DefaultTableModel(cols, 0);
 
-            // Create a JTable with the data model
-            table = new JTable(model);
-            table.removeColumn(table.getColumn("Id"));
-            table.setDefaultEditor(Object.class, null);
+        // Create a JTable with the data model
+        table = new JTable(model);
+        table.removeColumn(table.getColumn("Id"));
+        table.setDefaultEditor(Object.class, null);
 
-            // Create a renderer for center alignment
-            DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
-            centerRenderer.setHorizontalAlignment(JLabel.CENTER);
-            // set all columns to center
-            IntStream.range(0, table.getColumnCount())
-                            .forEach(i -> table.getColumnModel()
-                                    .getColumn(i)
-                                    .setCellRenderer(centerRenderer));
+        // Create a renderer for center alignment
+        DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
+        centerRenderer.setHorizontalAlignment(JLabel.CENTER);
+        // set all columns to center
+        IntStream.range(0, table.getColumnCount())
+                        .forEach(i -> table.getColumnModel()
+                                .getColumn(i)
+                                .setCellRenderer(centerRenderer));
 
-            refreshTable();
-            // Create a JScrollPane to hold the table
-            scrollPane = new JScrollPane(table);
-        }
+        refreshTable();
+        // Create a JScrollPane to hold the table
+        scrollPane = new JScrollPane(table);
+    }
+
+    private void sortTable(String option) {
+        model.setRowCount(0);
+        studentService.sortStudent(option.toLowerCase()).forEach(student ->
+                model.addRow(new Object[]{
+                        student.id(),
+                        student.name(),
+                        student.email(),
+                        student.batch(),
+                        student.gender()
+                }));
+    }
 
     public void refreshTable() {
         // Clear existing rows

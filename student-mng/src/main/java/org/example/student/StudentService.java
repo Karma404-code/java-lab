@@ -36,4 +36,8 @@ public class StudentService {
     public void updateStudent(Student student) {
         studentRepository.updateById(student);
     }
+
+    public List<Student> sortStudent(String column) {
+        return studentRepository.sortBy(column);
+    }
 }

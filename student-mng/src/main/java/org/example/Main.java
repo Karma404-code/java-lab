@@ -4,6 +4,7 @@ import com.formdev.flatlaf.FlatDarculaLaf;
 import com.formdev.flatlaf.FlatIntelliJLaf;
 import org.example.dashboard.DashboardUI;
 import org.example.login.LoginUI;
+import org.example.student.ui.MenuBar;
 import org.example.student.ui.StudentTable;
 
 import javax.swing.*;
@@ -22,9 +23,9 @@ public class Main {
 
             JPanel loginPanel = new LoginUI(frame);
             // JPanel dashboardPanel = new DashboardUI(frame);
-            JPanel studentPanel = new StudentTable(frame);
-            // frame.add(new LoginUI(frame), BorderLayout.CENTER);
-            frame.add(new DashboardUI(frame), BorderLayout.CENTER);
+            // JPanel studentPanel = new StudentTable(frame);
+            frame.add(new StudentTable(frame), BorderLayout.CENTER);
+            // frame.add(new DashboardUI(frame), BorderLayout.CENTER);
             frame.setVisible(true);
         } catch( Exception ex ) {
             System.err.println( "Failed to initialize LaF" );

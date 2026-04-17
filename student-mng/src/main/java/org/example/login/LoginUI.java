@@ -2,6 +2,7 @@ package org.example.login;
 
 import net.miginfocom.swing.MigLayout;
 import org.example.dashboard.DashboardUI;
+import org.example.student.ui.StudentTable;
 
 import javax.swing.*;
 import java.awt.event.MouseAdapter;
@@ -20,6 +21,7 @@ public class LoginUI extends JPanel {
 
     public
     LoginUI(JFrame parentFrame) {
+        parentFrame.setJMenuBar(null);
         loginService = LoginService.getLoginService();
         this.parentFrame = parentFrame;
 
@@ -38,7 +40,7 @@ public class LoginUI extends JPanel {
             String inputPwd = new String(pwd.getPassword());
 
             if(loginService.login(inputName, inputPwd)) {
-                switchToDashboard();
+                switchToStudentTable();
             } else {
                 // Show error message
                 JOptionPane.showMessageDialog(this, 
@@ -67,9 +69,9 @@ public class LoginUI extends JPanel {
         add(createAccountLabel, "wrap, cell 1 3, growx");
     }
 
-    private void switchToDashboard() {
+    private void switchToStudentTable() {
         parentFrame.getContentPane().removeAll();
-        parentFrame.add(new DashboardUI(parentFrame));
+        parentFrame.add(new StudentTable(parentFrame));
         parentFrame.revalidate();
         parentFrame.repaint();
     }

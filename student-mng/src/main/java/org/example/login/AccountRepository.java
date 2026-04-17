@@ -9,7 +9,7 @@ public class AccountRepository {
 
     private AccountRepository(){
         try {
-            String url = "jdbc:h2:~/Project/cs-7/JavaAdvanced/student-mng/school";
+            String url = "jdbc:h2:mem:school;DB_CLOSE_DELAY=-1;INIT=RUNSCRIPT FROM 'classpath:h2init.sql';USER=admin;PASSWORD=admin";
             String user = "admin";
             String password = "admin";
 

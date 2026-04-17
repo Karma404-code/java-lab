@@ -9,7 +9,7 @@ public class StudentRepository {
 
     public StudentRepository() {
         try {
-            String url = "jdbc:h2:~/Project/cs-7/JavaAdvanced/student-mng/school";
+            String url = "jdbc:h2:mem:school;DB_CLOSE_DELAY=-1;INIT=RUNSCRIPT FROM 'classpath:h2init.sql';USER=admin;PASSWORD=admin";
             String user = "admin";
             String password = "admin";
 
@@ -99,5 +99,25 @@ public class StudentRepository {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public List<Student> sortBy(String column) {
+        List<Student> students = new ArrayList<>();
+        PreparedStatement stmt;
+        try {
+            stmt = conn.prepareStatement("select * from student ORDER BY  " +  column);
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                students.add(new Student(
+                    rs.getInt("id"),
+                    rs.getString("name"),
+                    rs.getString("email"),
+                    rs.getInt("batch"),
+                    rs.getString("gender")));
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return students;
     }
 }

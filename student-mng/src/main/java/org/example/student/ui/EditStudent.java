@@ -8,7 +8,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.stream.IntStream;
 
-public class EditStudent extends JPanel {
+public class EditStudent extends JFrame {
     JFrame parentFrame;
      // JFrame parentFrame;
     StudentTable studentTable;
@@ -29,15 +29,18 @@ public class EditStudent extends JPanel {
         this.studentTable = studentTable;
         this.student = student;
 
+        setTitle("Edit Student");
+        setSize(900, 650);
+        setLocation(1200, 900);
+
         studentService = StudentService.getInstance();
         setLayout(new BorderLayout());
-
-        setSize(parentFrame.getWidth()/3, parentFrame.getHeight());
 
         initButtons();
         displayStudentInformation();
 
         add(formPanel, BorderLayout.CENTER);
+        setVisible(true);
     }
 
     public void displayStudentInformation(){
@@ -103,14 +106,14 @@ public class EditStudent extends JPanel {
                     batchModel.getElementAt(batch.getSelectedIndex()),
                     genderInput));
             studentTable.refreshTable();
-            parentFrame.remove(this);
+            dispose();
             parentFrame.revalidate();
             parentFrame.repaint();
         });
 
         cancel = new JButton("Cancel");
         cancel.addActionListener(e -> {
-           parentFrame.remove(this);
+            dispose();
            parentFrame.revalidate();
            parentFrame.repaint();
         });
